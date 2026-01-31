@@ -2,8 +2,10 @@ FROM jupyter/scipy-notebook:latest
 
 USER root
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev
 
 USER ${NB_UID}
 
